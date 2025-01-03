@@ -39,8 +39,6 @@ jobs:
 
       # Deploy to Firebase
       - name: Deploy to Firebase
-        env:
-          FIREBASE_AUTH_TOKEN: ${{ secrets.FIREBASE_AUTH_TOKEN }}
         run: |
           curl -X POST \
             -H "Authorization: Bearer $FIREBASE_AUTH_TOKEN" \
