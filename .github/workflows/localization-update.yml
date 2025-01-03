@@ -14,10 +14,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Debug to check if the file exists
+      - name: Debug directory
+        run: |
+          pwd
+          ls -al
+
       # Step 2: Convert Excel to JSON using Kotlin script
       - name: Convert Excel to JSON
         run: |
-          chmod +x convert_excel_to_json.kts
+          chmod +x ./convert_excel_to_json.kts
           ./convert_excel_to_json.kts
 
       # Step 3: Deploy to Firebase
