@@ -1,4 +1,4 @@
-name: Localization Update
+name: Localization Update with Firebase Authentication
 
 on:
   push:
@@ -14,18 +14,28 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Set up Firebase Service Account Key
+      - name: Set up Firebase Service Account Key
+        run: |
+          echo "$FIREBASE_SERVICE_ACCOUNT_KEY" > firebase-service-account.json
+        env:
+          FIREBASE_SERVICE_ACCOUNT_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
+
+      # Authenticate with Firebase
+      - name: Authenticate with Firebase
+        run: gcloud auth activate-service-account --key-file=firebase-service-account.json
+
+      # Generate Firebase Auth Token
+      - name: Generate Firebase Auth Token
+        run: |
+          TOKEN=$(gcloud auth print-access-token)
+          echo "FIREBASE_AUTH_TOKEN=$TOKEN" >> $GITHUB_ENV
+
       # Convert CSV to JSON
       - name: Convert CSV to JSON
         run: |
           pip install pandas
           python convert_csv_to_json.py
-
-      # Generate Firebase Auth Token
-      - name: Generate Firebase Auth Token
-        run: |
-          echo "${{ secrets.SERVICE_ACCOUNT_KEY_JSON }}" > service-account-key.json
-          TOKEN=$(gcloud auth activate-service-account --key-file=service-account-key.json && gcloud auth print-access-token)
-          echo "FIREBASE_AUTH_TOKEN=$TOKEN" >> $GITHUB_ENV
 
       # Deploy to Firebase
       - name: Deploy to Firebase
