@@ -3,37 +3,24 @@ name: Localization Update
 on:
   push:
     paths:
-      - "localization.xlsx"  # Trigger only when the Excel file is updated
+      - "localization.xlsx" # Trigger only when the Excel file is updated
 
 jobs:
   process-localization:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the repository
+      # Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Debug to check the directory and confirm the file exists
-      - name: Debug directory
-        run: |
-          echo "Current directory: $(pwd)"
-          echo "Listing files:"
-          ls -al
-
-      # Step 2: Install Kotlin
-      - name: Install Kotlin
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y kotlin
-
-      # Step 3: Convert Excel to JSON using Kotlin script
+      # Convert Excel to JSON
       - name: Convert Excel to JSON
         run: |
-          chmod +x ./convert_excel_to_json.kts
-          kotlin ./convert_excel_to_json.kts  # Run using the Kotlin compiler
+          pip install pandas openpyxl
+          python convert_excel_to_json.py
 
-      # Step 4: Deploy to Firebase
+      # Deploy to Firebase Remote Config
       - name: Deploy to Firebase
         env:
           FIREBASE_AUTH_TOKEN: ${{ secrets.FIREBASE_AUTH_TOKEN }}
