@@ -14,10 +14,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Debug to check if the file exists
+      # Debug to check the directory and confirm the file exists
       - name: Debug directory
         run: |
-          pwd
+          echo "Current directory: $(pwd)"
+          echo "Listing files:"
           ls -al
 
       # Step 2: Convert Excel to JSON using Kotlin script
