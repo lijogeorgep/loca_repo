@@ -21,13 +21,19 @@ jobs:
           echo "Listing files:"
           ls -al
 
-      # Step 2: Convert Excel to JSON using Kotlin script
+      # Step 2: Install Kotlin
+      - name: Install Kotlin
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y kotlin
+
+      # Step 3: Convert Excel to JSON using Kotlin script
       - name: Convert Excel to JSON
         run: |
           chmod +x ./convert_excel_to_json.kts
-          ./convert_excel_to_json.kts
+          kotlin ./convert_excel_to_json.kts
 
-      # Step 3: Deploy to Firebase
+      # Step 4: Deploy to Firebase
       - name: Deploy to Firebase
         env:
           FIREBASE_AUTH_TOKEN: ${{ secrets.FIREBASE_AUTH_TOKEN }}
