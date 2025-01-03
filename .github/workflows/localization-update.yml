@@ -1,0 +1,42 @@
+name: Localization Update
+
+on:
+  push:
+    paths:
+      - "localization.xlsx" # Trigger when the Excel file is updated
+
+jobs:
+  process-localization:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Python (for Excel to JSON conversion)
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.9"
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: |
+          pip install pandas openpyxl
+
+      # Step 4: Convert Excel to JSON
+      - name: Convert Excel to JSON
+        run: |
+          python convert_excel_to_json.py
+
+      # Step 5: Deploy to Firebase
+      - name: Deploy to Firebase
+        env:
+          FIREBASE_AUTH_TOKEN: ${{ secrets.FIREBASE_AUTH_TOKEN }}
+        run: |
+          curl -X POST \
+            -H "Authorization: Bearer $FIREBASE_AUTH_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d @localization.json \
+            https://firebaseremoteconfig.googleapis.com/v1/projects/{your-project-id}/remoteConfig
