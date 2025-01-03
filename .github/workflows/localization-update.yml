@@ -3,7 +3,7 @@ name: Localization Update
 on:
   push:
     paths:
-      - "localization.xlsx" # Trigger only when the Excel file is updated
+      - "localization.csv"  # Trigger only when the CSV file is updated
 
 jobs:
   process-localization:
@@ -14,11 +14,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Convert Excel to JSON
-      - name: Convert Excel to JSON
+      # Convert CSV to JSON
+      - name: Convert CSV to JSON
         run: |
-          pip install pandas openpyxl
-          python convert_excel_to_json.py
+          pip install pandas
+          python convert_csv_to_json.py
 
       # Deploy to Firebase Remote Config
       - name: Deploy to Firebase
