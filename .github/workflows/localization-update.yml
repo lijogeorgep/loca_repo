@@ -31,7 +31,7 @@ jobs:
       - name: Convert Excel to JSON
         run: |
           chmod +x ./convert_excel_to_json.kts
-          kotlin ./convert_excel_to_json.kts
+          kotlin ./convert_excel_to_json.kts  # Run using the Kotlin compiler
 
       # Step 4: Deploy to Firebase
       - name: Deploy to Firebase
