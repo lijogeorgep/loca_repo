@@ -40,7 +40,7 @@ jobs:
       # Deploy to Firebase
       - name: Deploy to Firebase
         run: |
-          curl -X POST \
+          curl -X GET \
             -H "Authorization: Bearer $FIREBASE_AUTH_TOKEN" \
             -H "Content-Type: application/json" \
             -d @localization.json \
