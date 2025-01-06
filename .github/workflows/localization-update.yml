@@ -37,11 +37,10 @@ jobs:
           pip install pandas
           python convert_csv_to_json.py
 
-      # Deploy to Firebase
-      - name: Deploy to Firebase
+      # Deploy to Firebase (GET request to fetch Remote Config)
+      - name: Fetch Firebase Remote Config
         run: |
           curl -X GET \
             -H "Authorization: Bearer $FIREBASE_AUTH_TOKEN" \
             -H "Content-Type: application/json" \
-            -d @localization.json \
             https://firebaseremoteconfig.googleapis.com/v1/projects/localization-automatic-sample/remoteConfig
